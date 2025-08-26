@@ -2,6 +2,16 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, ScrollView, StyleSheet, ActivityIndicator, Modal } from "react-native";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform } from 'react-native';
+
+// PC-hosted server:
+// const BASE_URL =
+//   Platform.OS === 'android'
+//     ? 'http://10.0.2.2:5000'   // Android emulator -> host PC
+//     : 'http://127.0.0.1:5000'; // iOS simulator or web
+
+// If you test on a real Android device over Wi-Fi, use your PC's LAN IP, e.g.:
+const BASE_URL = 'http://192.168.1.50:5000';
 
 type Message = {
   text: string;
@@ -25,7 +35,7 @@ export default function ChatScreen() {
     setLoading(true); // ✅ Show loader
 
     try {
-      const res = await axios.post(API_URL, {
+      const res = await axios.post(`${BASE_URL}/chat`, {
         model: "tinyllama",
         prompt: input,
         stream: false
